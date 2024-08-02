@@ -1,5 +1,7 @@
+import { Body } from "./components";
+
 function App() {
-  return <></>;
+  return <Body />;
 }
 
 export default App;
