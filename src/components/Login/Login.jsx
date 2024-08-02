@@ -6,6 +6,11 @@ const Login = () => {
   const toggleSignInForm = () => {
     setIsSignIn(!isSignIn);
   };
+
+  const handleButtonClick = (e) => {
+    e.preventDefault();
+    toggleSignInForm();
+  };
   return (
     <div>
       <Header />
@@ -38,7 +43,11 @@ const Login = () => {
             placeholder="Password"
             className="p-4 my-4 w-full rounded-sm bg-black/40"
           />
-          <button type="submit" className="py-4 my-4 bg-red-700 w-full">
+          <button
+            type="submit"
+            className="py-4 my-4 bg-red-700 w-full"
+            onClick={handleButtonClick}
+          >
             {isSignIn ? "Sign In" : "Sign Up"}
           </button>
 
