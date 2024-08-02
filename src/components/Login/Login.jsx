@@ -1,16 +1,25 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Header } from "../index";
-
+import validate from "../../utils/validate";
 const Login = () => {
   const [isSignIn, setIsSignIn] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
+  const email = useRef(null);
+  const password = useRef(null);
+
   const toggleSignInForm = () => {
     setIsSignIn(!isSignIn);
   };
 
   const handleButtonClick = (e) => {
     e.preventDefault();
-    toggleSignInForm();
+    const emailValue = email.current.value;
+    const passwordValue = password.current.value;
+    //console.log(email, password);
+    //console.log(emailValue, passwordValue);
+    setErrorMessage(validate(emailValue, passwordValue));
   };
+
   return (
     <div>
       <Header />
@@ -36,13 +45,19 @@ const Login = () => {
             type="email"
             placeholder="Email"
             className="p-4 my-4 w-full rounded-sm bg-black/40 "
+            ref={email}
           />
 
           <input
             type="password"
             placeholder="Password"
             className="p-4 my-4 w-full rounded-sm bg-black/40"
+            ref={password}
           />
+          {errorMessage && (
+            <p className="text-red-500 font-bold text-lg p-2">{errorMessage}</p>
+          )}
+
           <button
             type="submit"
             className="py-4 my-4 bg-red-700 w-full"

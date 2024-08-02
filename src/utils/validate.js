@@ -8,3 +8,5 @@ const validate = (email, password) => {
   if (!isPasswordValid) return "Password is not valid";
   return null;
 };
+
+export default validate;
