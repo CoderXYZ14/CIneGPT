@@ -1,6 +1,11 @@
 import React, { useRef, useState } from "react";
 import { Header } from "../index";
 import validate from "../../utils/validate";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { auth } from "../../utils/firebase";
 const Login = () => {
   const [isSignIn, setIsSignIn] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
@@ -17,7 +22,37 @@ const Login = () => {
     const passwordValue = password.current.value;
     //console.log(email, password);
     //console.log(emailValue, passwordValue);
-    setErrorMessage(validate(emailValue, passwordValue));
+
+    const message = validate(emailValue, passwordValue);
+    setErrorMessage(message);
+    if (message !== null) return;
+    if (isSignIn) {
+      //signup
+      createUserWithEmailAndPassword(auth, emailValue, passwordValue)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          console.log("User created: ", user);
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          setErrorMessage(errorCode + "-" + errorMessage);
+        });
+    } else {
+      //signin
+      signInWithEmailAndPassword(auth, emailValue, passwordValue)
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          console.log("User signed in: ", user);
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.error("Error: ", errorCode, errorMessage);
+        });
+    }
   };
 
   return (
