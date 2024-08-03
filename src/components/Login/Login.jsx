@@ -6,12 +6,14 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { auth } from "../../utils/firebase";
+import { useNavigate } from "react-router-dom";
+
 const Login = () => {
   const [isSignIn, setIsSignIn] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
   const email = useRef(null);
   const password = useRef(null);
-
+  const navigate = useNavigate();
   const toggleSignInForm = () => {
     setIsSignIn(!isSignIn);
   };
@@ -20,37 +22,36 @@ const Login = () => {
     e.preventDefault();
     const emailValue = email.current.value;
     const passwordValue = password.current.value;
-    //console.log(email, password);
-    //console.log(emailValue, passwordValue);
 
     const message = validate(emailValue, passwordValue);
     setErrorMessage(message);
     if (message !== null) return;
+
     if (isSignIn) {
-      //signup
+      // Signup
       createUserWithEmailAndPassword(auth, emailValue, passwordValue)
         .then((userCredential) => {
           const user = userCredential.user;
           console.log("User created: ", user);
+          navigate("/browse");
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          setErrorMessage(errorCode + "-" + errorMessage);
+          setErrorMessage(`${errorCode} - ${errorMessage}`);
         });
     } else {
-      //signin
+      // Signin
       signInWithEmailAndPassword(auth, emailValue, passwordValue)
         .then((userCredential) => {
-          // Signed in
           const user = userCredential.user;
           console.log("User signed in: ", user);
-          // ...
+          navigate("/browse");
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          setErrorMessage(errorCode + "-" + errorMessage);
+          setErrorMessage(`${errorCode} - ${errorMessage}`);
         });
     }
   };
@@ -74,6 +75,7 @@ const Login = () => {
               type="text"
               placeholder="Name"
               className="p-4 my-4 w-full rounded-sm bg-black/40"
+              required
             />
           )}
           <input
@@ -81,6 +83,7 @@ const Login = () => {
             placeholder="Email"
             className="p-4 my-4 w-full rounded-sm bg-black/40 "
             ref={email}
+            required
           />
 
           <input
@@ -88,6 +91,7 @@ const Login = () => {
             placeholder="Password"
             className="p-4 my-4 w-full rounded-sm bg-black/40"
             ref={password}
+            required
           />
           {errorMessage && (
             <p className="text-red-500 font-bold text-lg p-2">{errorMessage}</p>
@@ -102,7 +106,7 @@ const Login = () => {
           </button>
 
           <p className="py-4 m-1 text-gray-400 inline-block">
-            {isSignIn ? "New to Netflix" : "Already Registered"} ?
+            {isSignIn ? "New to Netflix" : "Already Registered"}?
           </p>
 
           <p className="inline-block cursor-pointer" onClick={toggleSignInForm}>
