@@ -9,22 +9,17 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    //console.log("Setting up onAuthStateChanged");
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      // console.log("onAuthStateChanged triggered");
       if (user) {
-        //console.log("User is logged in");
-        const { uid, email, displayName } = user;
-        dispatch(login({ uid, email, displayName }));
-        //console.log("User logged in:", user);
+        const { uid, email, displayName, photoURL } = user;
+        dispatch(login({ uid, email, displayName, photoURL }));
       } else {
-        console.log("User is logged out");
         dispatch(logout());
       }
     });
 
-    return () => unsubscribe(); // Cleanup the subscription
-  }, []);
+    return () => unsubscribe();
+  }, [dispatch]); // Include dispatch in the dependency array
 
   return <Body />;
 }
