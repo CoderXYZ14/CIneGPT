@@ -21,7 +21,7 @@ const Header = () => {
   };
   //shifted here as we want navigate in one of children of body which is always accessable ie is header
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         const { uid, email, displayName, photoURL } = user;
         dispatch(
@@ -38,6 +38,8 @@ const Header = () => {
         navigate("/");
       }
     });
+    //unsubscribe when component unmount
+    return () => unsubscribe();
   }, []);
   return (
     <div className=" absolute px-8 py-2 bg-gradient-to-b from-black w-full z-10 flex justify-between">
