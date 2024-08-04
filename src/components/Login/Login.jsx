@@ -14,6 +14,7 @@ import { login } from "../../app/authSlice";
 const Login = () => {
   const [isSignIn, setIsSignIn] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
+  const name = useRef(null);
   const email = useRef(null);
   const password = useRef(null);
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ const Login = () => {
         .then((userCredential) => {
           const user = userCredential.user;
           updateProfile(user, {
-            displayName: "Jane Q. User",
+            displayName: name.current.value,
             photoURL: "https://avatars.githubusercontent.com/u/150971985?v=4",
           })
             .then(() => {
@@ -90,6 +91,7 @@ const Login = () => {
             <input
               type="text"
               placeholder="Name"
+              ref={name}
               className="p-4 my-4 w-full rounded-sm bg-black/40"
               required
             />
