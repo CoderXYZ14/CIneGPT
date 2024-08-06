@@ -1,11 +1,12 @@
 import MovieCard from "./MovieCard";
+import "./MovieList.css";
 
 const MovieList = ({ title, movies }) => {
   console.log(movies);
   return (
-    <div className="px-6 ">
+    <div className="px-6">
       <h1 className="text-3xl py-4 text-white">{title}</h1>
-      <div className="flex overflow-x-scroll">
+      <div className="flex overflow-x-scroll no-scrollbar scroll-smooth">
         <div className="flex">
           {movies?.map((movie) => (
             <MovieCard key={movie.id} posterPath={movie.poster_path} />
@@ -15,4 +16,5 @@ const MovieList = ({ title, movies }) => {
     </div>
   );
 };
+
 export default MovieList;
